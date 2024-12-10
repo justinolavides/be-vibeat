@@ -17,6 +17,7 @@ class ResetPasswordController extends Controller
             'password' => 'required|min:8|confirmed',
         ]);
 
+        // Check if the email exists in the users' list
         $user = User::where('email', $request->email)->first();
 
         if (!$user) {
@@ -24,6 +25,7 @@ class ResetPasswordController extends Controller
             return response()->json(['message' => 'Failed to reset password. Please try again.'], 400);
         }
 
+        // Update the user's password
         $user->forceFill([
             'password' => Hash::make($request->password),
         ])->save();

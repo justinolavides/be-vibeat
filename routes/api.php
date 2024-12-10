@@ -2,10 +2,11 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\ResetPasswordController;
-use App\Http\Controllers\MusicController; // Import the MusicController
+use App\Http\Controllers\MusicController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -18,10 +19,7 @@ Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLink
 Route::post('/reset-password', [ResetPasswordController::class, 'reset']);
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/users', function () {
-        return \App\Models\User::paginate(10);
-    });
-
-    // Add music route
-    Route::get('/music', [MusicController::class, 'index']);
+    Route::get('/users', [UserController::class, 'index']);
+    Route::get('/user/profile', [UserController::class, 'showProfile']); // Fetch current user profile
+    Route::put('/user/profile', [UserController::class, 'updateProfile']); // Update user profile
 });
