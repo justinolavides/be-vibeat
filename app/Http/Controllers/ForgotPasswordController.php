@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Log;
 use App\Models\User;
 
@@ -20,7 +21,7 @@ class ForgotPasswordController extends Controller
             return response()->json(['message' => 'Failed to send password reset email. Please try again.'], 400);
         }
 
-        Log::info('Password reset link sent', ['email' => $request->email]);
+        // No need to actually send the reset link, just for simulation
         return response()->json(['message' => 'Valid email. Redirecting...'], 200);
     }
 }
