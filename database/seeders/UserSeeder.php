@@ -18,8 +18,15 @@ class UserSeeder extends Seeder
             'name' => 'John Doe',
             'email' => 'john@example.com',
             'password' => Hash::make('password'),
+            'role' => 'admin',
         ]);
 
+        User::create([ 
+            'name' => 'Sample User', 
+            'email' => 'user@example.com', 
+            'password' => Hash::make('password'), 
+            'role' => 'user', 
+        ]);
         User::factory()->count(20)->create();
     }
 }

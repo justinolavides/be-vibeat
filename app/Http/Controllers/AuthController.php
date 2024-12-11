@@ -26,6 +26,16 @@ class AuthController extends Controller
             $token = $user->createToken('auth_token')->plainTextToken;
             Log::info('User authenticated', ['user' => $user]);
 
+            // Role-based redirection
+            if ($user->role == 'admin') {
+                return response()->json(['message' => 'Login successful', 'role' => 'admin', 'token' => $token], 200);
+            } elseif ($user->role == 'user') {
+                return response()->json(['message' => 'Login successful', 'role' => 'user', 'token' => $token], 200);
+            }
+
+            // Default redirection if role is not matched
+            
+
             return response()->json(['message' => 'Login successful', 'token' => $token], 200);
         }
 

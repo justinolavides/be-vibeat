@@ -22,6 +22,20 @@ Route::middleware('auth:sanctum')->group(function () {
         return \App\Models\User::paginate(10);
     });
 
+    // Admin-specific routes
+    Route::middleware('role:admin')->group(function () {
+        Route::get('/users', function () {
+            return \App\Models\User::paginate(10);
+        });
+        Route::get('/userlist', [UserListController::class, 'index'])->name('admin.userlist');
+    });
+
+    // Customer-specific routes
+    Route::middleware('role:customer')->group(function () {
+        Route::get('/dashboard', [CustomerDashboardController::class, 'index'])->name('customer.dashboard');
+    });
+});
+
     // Add music route
     Route::get('/music', [MusicController::class, 'index']);
-});
+
