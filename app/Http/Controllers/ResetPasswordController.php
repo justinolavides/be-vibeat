@@ -5,12 +5,14 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Password;
 use App\Models\User;
 
 class ResetPasswordController extends Controller
 {
     public function reset(Request $request)
     {
+        // Validate the request
         $request->validate([
             'token' => 'required',
             'email' => 'required|email',
@@ -22,15 +24,25 @@ class ResetPasswordController extends Controller
 
         if (!$user) {
             Log::warning('Password reset failed - user not found', ['email' => $request->email]);
-            return response()->json(['message' => 'Failed to reset password. Please try again.'], 400);
+            return response()->json(['message' => 'Invalid email.'], 400);
         }
 
-        // Update the user's password
-        $user->forceFill([
-            'password' => Hash::make($request->password),
-        ])->save();
+        // Password reset process using Laravel's built-in functionality
+        $status = Password::reset(
+            $request->only('email', 'password', 'password_confirmation', 'token'),
+            function ($user, $password) {
+                $user->forceFill([
+                    'password' => Hash::make($password),
+                ])->save();
+            }
+        );
 
-        Log::info('Password reset successful', ['email' => $request->email]);
-        return response()->json(['message' => 'Password has been reset successfully. Returning to the login page...'], 200);
+        if ($status === Password::PASSWORD_RESET) {
+            Log::info('Password reset successful', ['email' => $request->email]);
+            return response()->json(['message' => 'Password has been reset successfully. Returning to the login page...'], 200);
+        } else {
+            Log::error('Password reset failed', ['email' => $request->email]);
+            return response()->json(['message' => 'Failed to reset password. Please try again.'], 500);
+        }
     }
 }
