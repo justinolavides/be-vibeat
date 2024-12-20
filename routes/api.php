@@ -19,14 +19,11 @@ Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLink
 Route::post('/reset-password', [ResetPasswordController::class, 'reset']);
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/users', function () {
-        return \App\Models\User::paginate(10);
-    });
-    Route::get('/users', [UserController::class, 'index']);
 
     // Admin-specific routes
     Route::middleware('role:admin')->group(function () {
         Route::get('/userlist', [UserListController::class, 'index'])->name('admin.userlist');
+        Route::get('/users', [UserController::class, 'index']);
     });
 
     // Customer-specific routes
