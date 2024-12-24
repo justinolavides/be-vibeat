@@ -2,11 +2,12 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\ResetPasswordController;
-use App\Http\Controllers\MusicController; // Import the MusicController
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\MusicController;
+use App\Http\Controllers\PlaylistController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -18,19 +19,17 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail']);
 Route::post('/reset-password', [ResetPasswordController::class, 'reset']);
 
+
 Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/users', [UserController::class, 'index']);
+    Route::get('/user/profile', [UserController::class, 'showProfile']); // Fetch current user profile
+    Route::put('/user/profile', [UserController::class, 'updateProfile']); // Update user profile
 
-    // Admin-specific routes
-    Route::middleware('role:admin')->group(function () {
-        Route::get('/userlist', [UserListController::class, 'index'])->name('admin.userlist');
-        Route::get('/users', [UserController::class, 'index']);
-    });
-
-    // Customer-specific routes
-    Route::middleware('role:customer')->group(function () {
-        Route::get('/dashboard', [CustomerDashboardController::class, 'index'])->name('customer.dashboard');
-    });
+    // Additional routes for music and playlists
+    Route::get('/music', [MusicController::class, 'getAllMusic']);
+    Route::get('/top-charts', [MusicController::class, 'getTopCharts']);
+    Route::get('/listen-again', [MusicController::class, 'getListenAgain']);
+    Route::post('/playlist', [PlaylistController::class, 'addToPlaylist']);
+    
+    
 });
-
-    // Add music route
-    Route::get('/music', [MusicController::class, 'index']);
