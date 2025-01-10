@@ -7,7 +7,6 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\ResetPasswordController;
 use App\Http\Controllers\MusicController;
-use App\Http\Controllers\PlaylistController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -29,7 +28,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/music', [MusicController::class, 'getAllMusic']);
     Route::get('/top-charts', [MusicController::class, 'getTopCharts']);
     Route::get('/listen-again', [MusicController::class, 'getListenAgain']);
-    Route::post('/playlist', [PlaylistController::class, 'addToPlaylist']);
     
     
 });
