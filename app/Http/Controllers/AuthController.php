@@ -70,7 +70,7 @@ class AuthController extends Controller
             $token = $user->createToken('auth_token')->plainTextToken;
             Log::info('User registered', ['user' => $user]);
 
-            return response()->json(['message' => 'Registration successful', 'token' => $token], 200);
+            return response()->json(['message' => '-Registration successful', 'token' => $token], 200);
         } catch (\Exception $e) {
             Log::error('Registration error', ['exception' => $e->getMessage()]);
             return response()->json(['message' => 'Registration failed'], 500);
