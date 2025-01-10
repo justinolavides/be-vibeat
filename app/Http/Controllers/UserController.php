@@ -19,7 +19,20 @@ class UserController extends Controller
         // Return the paginated response
         return response()->json($users);
     }
-
+    
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(string $id)
+    {
+        $user = User::find($id);
+        if ($user) {
+            $user->delete();
+            return response()->json(['message' => 'User deleted successfully']);
+        } else {
+            return response()->json(['message' => 'User not found'], 404);
+        }
+    }
 
     /**
      * Fetch current user profile.

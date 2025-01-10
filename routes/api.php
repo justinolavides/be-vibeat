@@ -23,6 +23,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/users', [UserController::class, 'index']);
     Route::get('/user/profile', [UserController::class, 'showProfile']); // Fetch current user profile
     Route::put('/user/profile', [UserController::class, 'updateProfile']); // Update user profile
+    Route::delete('/users/{id}', [UserController::class, 'destroy']); // Delete Users
 
     // Additional routes for music and playlists
     Route::get('/music', [MusicController::class, 'getAllMusic']);
